@@ -1,6 +1,6 @@
 # Calendar Challenge
 
-This Project was started with [CreateReactApp]
+This Project was started with [CreateReactApp](https://facebook.github.io/create-react-app)
 
 ## Features Completed
 

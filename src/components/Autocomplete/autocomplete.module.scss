@@ -1,0 +1,22 @@
+.autocomplete {
+  position: relative;
+  .input {
+    width: 100%;
+  }
+  .options {
+    z-index: 999;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 2px 1px 1px #ccc;
+    > div {
+      cursor: pointer;
+      padding: 8px;
+      &:hover {
+        background-color: #ccc;
+      }
+    }
+  }
+}

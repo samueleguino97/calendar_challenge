@@ -23,9 +23,8 @@ export function getDayHours(day = moment()) {
   const initialHour = moment(day).startOf("day");
 
   const finalHour = moment(day).endOf("day");
-  console.log((finalHour.hours() - initialHour.hours()) * 2);
   const period_array = Array.from(
-    { length: (finalHour.hours() - initialHour.hours()) * 2 },
+    { length: finalHour.diff(initialHour, "hours") * 2 + 2 },
     (_, index) => {
       const period = moment(initialHour).add(index * 30, "minutes");
       return period;

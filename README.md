@@ -30,7 +30,7 @@ Redux was used as well as material ui for ui elements and moment for date handli
 
 This project can be used locally simply by running
 
-`yarn start`
+`yarn install` or `npm install`
 
 and then running any of the following scripts:
 
@@ -38,7 +38,7 @@ and then running any of the following scripts:
 
 In the project directory, you can run:
 
-### `yarn start`
+### `yarn start` or `npm start`
 
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -46,12 +46,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
-### `yarn test`
+### `yarn test` or `npm run test`
 
 Launches the test runner in the interactive watch mode.<br />
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+### `yarn build` or `npm run build`
 
 Builds the app for production to the `build` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.

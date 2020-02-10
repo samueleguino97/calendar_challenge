@@ -41,7 +41,7 @@ function ReminderCreationDialog({ open, onClose, onAdd, currentDate, data }) {
   function validateFields() {
     const actual_errors = {};
     //Validate date
-    if (!date) {
+    if (!date || !moment.isDate(date)) {
       actual_errors.date = "Date field is required";
     }
     if (!title) {
@@ -63,6 +63,7 @@ function ReminderCreationDialog({ open, onClose, onAdd, currentDate, data }) {
 
   return (
     <Dialog
+      data-testid="creation_dialog"
       className={styles.dialog}
       open={open}
       onClose={onClose}

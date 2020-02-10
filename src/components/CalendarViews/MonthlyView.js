@@ -16,6 +16,9 @@ function MonthlyView({ date, reminders, onAdd, onChange }) {
     <div className={styles.month_view}>
       {getMonthDays(date).map((month_day, index) => (
         <div
+          data-testid={
+            month_day.isSame(moment(), "day") ? "current_day" : "month_day"
+          }
           className={classnames({
             [styles.day]: true,
             [styles.first_day]: index < 7,

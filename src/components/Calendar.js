@@ -10,28 +10,49 @@ import MonthlyView from "./CalendarViews/MonthlyView";
 import WeeklyView from "./CalendarViews/WeeklyView";
 import DailyView from "./CalendarViews/DailyView";
 
-function Calendar() {
-  const {
-    createReminder,
-    handleChangeView,
-    handleDateChange,
-    toggleCreating,
-    updateReminder
-  } = useCalendarActions();
-  const { view, current_date, reminders, creating_reminder } = useSelector(
-    state => state.calendar
-  );
+function Calendar({
+  onCreate,
+  onChangeView,
+  onChangeDate,
+  onCreationToggle,
+  onUpdate,
+  view,
+  current_date,
+  reminders,
+  creating_reminder
+}) {
   const [reminderToEdit, setReminderToEdit] = useState(null);
+
   function handleDateStep(direction = 0) {
-    handleDateChange(moment(current_date).add(direction, view));
+    onChangeDate(moment(current_date).add(direction, view));
   }
   function handleToday() {
-    handleDateChange(moment());
+    onChangeDate(moment());
+  }
+
+  function openCreateOrEditDialog(date, data) {
+    //CHECKS IF OPENING TO UPDATE
+    if (data) {
+      setReminderToEdit(data);
+    }
+    onChangeDate(date);
+    onCreationToggle();
+  }
+
+  function closeCreateOrEditDialog() {
+    onCreationToggle();
+    setReminderToEdit(null);
   }
 
   function addReminder({ existing, old_date, ...reminder }) {
+    if (reminder.title.length >= 30) {
+      reminder.title = reminder.title
+        .split("")
+        .slice(0, 30)
+        .join("");
+    }
     if (existing) {
-      updateReminder({
+      onUpdate({
         reminder,
         key: GET_KEY_FORMAT(reminder.date),
         old_key: GET_KEY_FORMAT(old_date)
@@ -42,23 +63,9 @@ function Calendar() {
         ? reminders[GET_KEY_FORMAT(reminder.date)].length
         : 0;
 
-      createReminder({ reminder, key: GET_KEY_FORMAT(reminder.date) });
+      onCreate({ reminder, key: GET_KEY_FORMAT(reminder.date) });
     }
     closeCreateOrEditDialog();
-  }
-
-  function openCreateOrEditDialog(date, data) {
-    //CHECKS IF OPENING TO UPDATE
-    if (data) {
-      setReminderToEdit(data);
-    }
-    handleDateChange(date);
-    toggleCreating();
-  }
-
-  function closeCreateOrEditDialog() {
-    toggleCreating();
-    setReminderToEdit(null);
   }
 
   return (
@@ -74,7 +81,7 @@ function Calendar() {
           {VIEWS.map(view_option => (
             <div
               className={view_option.value === view ? styles.active : ""}
-              onClick={() => handleChangeView(view_option.value)}
+              onClick={() => onChangeView(view_option.value)}
             >
               {view_option.label}
             </div>
@@ -100,13 +107,38 @@ function Calendar() {
         <MonthlyView
           date={current_date}
           onAdd={openCreateOrEditDialog}
-          onChange={handleDateChange}
+          onChange={onChangeDate}
           reminders={reminders}
         />
       )}
-      <Fab onClick={toggleCreating} color="primary" className={styles.add}>
+      <Fab
+        data-testid="add_button"
+        onClick={onCreationToggle}
+        color="primary"
+        className={styles.add}
+      >
         +
       </Fab>
+      {/* TEST BUTTON */}
+      <button
+        data-testid="create_test_button"
+        style={{
+          visibility: "hidden",
+          opacity: 0,
+          position: "absolute",
+          zIndex: -2
+        }}
+        onClick={(wa, e) => {
+          addReminder({
+            id: 0,
+            title:
+              "test reminder to test characters this should stop at 30 hehe this should not be more that 30",
+            date: moment(),
+            city: 2453
+          });
+        }}
+      ></button>
+      {/* TEST BUTTON */}
       {creating_reminder && (
         <ReminderCreationDialog
           open={creating_reminder}

@@ -1,0 +1,114 @@
+.month_view {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(80px, 1fr));
+  grid-template-rows: repeat(5, minmax(100px, 150px));
+  height: calc(100% - 50px);
+  padding: 0 5px;
+  overflow: auto;
+  > div {
+    border: 0.5px solid transparentize($color: #efefef, $amount: 0.6);
+    font-size: 1rem;
+    display: grid;
+    grid-template-rows: 10px 1fr 20px;
+    grid-template-columns: 100%;
+    padding: 12px;
+    width: 100%;
+    overflow: hidden;
+    * {
+      max-width: 100%;
+    }
+
+    &.active {
+      box-shadow: 0 1px 4px 2px #ccc;
+    }
+    &.day {
+      color: #999;
+      font-weight: bold;
+      > :last-child {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+    &.disabled {
+      color: #eee;
+    }
+    &.first_day {
+      :first-child {
+        font-weight: bold;
+        color: #999;
+      }
+    }
+    &.current {
+      color: #5393fe;
+    }
+    .date_number {
+      :first-child {
+        display: flex;
+        align-items: center;
+        opacity: 0;
+        transition: all 0.3s;
+        color: #5393fe;
+        > span {
+          cursor: pointer;
+        }
+        svg {
+          width: 12px;
+          cursor: pointer;
+          height: 12px;
+          margin: 0 4px;
+          margin-top: 4px;
+        }
+      }
+      :last-child {
+        cursor: pointer;
+      }
+    }
+
+    &:hover {
+      .date_number {
+        :first-child {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.reminders {
+  > div {
+    width: 100%;
+    height: 30%;
+    font-size: 16px;
+    color: white;
+    font-weight: normal;
+    align-items: center;
+    line-height: 100%;
+    padding-left: 8px;
+    opacity: 1;
+    transition: opacity 0.3s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &:hover {
+      cursor: pointer;
+      opacity: 0.6;
+    }
+  }
+}
+.week_view {
+  height: calc(100% - 50px);
+  overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(80px, 1fr));
+  grid-gap: 12px;
+}
+.day_view {
+  overflow: auto;
+  height: calc(100% - 50px);
+}
+.hours {
+  font-size: 12px;
+  padding: 12px 0;
+  color: #ccc;
+}

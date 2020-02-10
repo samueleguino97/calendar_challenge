@@ -1,5 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
+import {
+  ToggleCreating,
+  UpdateReminder,
+  AddReminder,
+  ChangeDate,
+  ChangeView
+} from "../redux/actions";
 
 export function useFetch(url = "", options = {}, initialValue = {}) {
   const [data, setData] = useState(initialValue);
@@ -61,4 +68,19 @@ export function useFormState(initialState = {}) {
   }
 
   return [formState, handleFieldChange, clearForm];
+}
+export function useCalendarActions() {
+  const handleChangeView = useAction(ChangeView);
+  const handleDateChange = useAction(ChangeDate);
+  const createReminder = useAction(AddReminder);
+  const updateReminder = useAction(UpdateReminder);
+  const toggleCreating = useAction(ToggleCreating);
+
+  return {
+    handleChangeView,
+    handleDateChange,
+    createReminder,
+    updateReminder,
+    toggleCreating
+  };
 }

@@ -16,6 +16,9 @@ import { Fab, Button } from "@material-ui/core";
 import classnames from "classnames";
 import ReminderCreationDialog from "./ReminderCreationDialog/ReminderCreationDialog";
 import { ReactComponent as WeatherIcon } from "../assets/icons/weather.svg";
+import MonthlyView from "./CalendarViews/MonthlyView";
+import WeeklyView from "./CalendarViews/WeeklyView";
+import DailyView from "./CalendarViews/DailyView";
 
 function Calendar() {
   const handleChangeView = useAction(ChangeView);
@@ -141,116 +144,26 @@ function Calendar() {
       </header>
 
       {view === "day" && (
-        <div className={styles.day_view}>
-          {getDayHours(current_date).map(period => (
-            <div className={styles.hours}>
-              {period.format("HH:mm")}
-              <div className={styles.reminders}>
-                {reminders[GET_KEY_FORMAT(period)]
-                  ?.filter(
-                    reminder =>
-                      reminder.date.isBetween(
-                        period,
-                        moment(period).add(30, "minutes")
-                      ) || reminder.date.isSame(period, "minute")
-                  )
-                  .map(reminder => (
-                    <div
-                      onClick={() => handleAddReminder(period, reminder)}
-                      style={{ backgroundColor: reminder.color }}
-                    >
-                      {reminder.title}
-                    </div>
-                  ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        <DailyView
+          date={current_date}
+          onAdd={handleAddReminder}
+          reminders={reminders}
+        />
       )}
       {view === "week" && (
-        <div className={styles.week_view}>
-          {getWeek(current_date).map(weekday => (
-            <div>
-              {weekday.format("dddd Do")}
-
-              {getDayHours(weekday).map((hour, index) => {
-                return (
-                  <div className={styles.hours}>
-                    <div>{hour.format("HH:mm ")}</div>
-                    <div className={styles.reminders}>
-                      {reminders[GET_KEY_FORMAT(weekday)]
-                        ?.filter(
-                          reminder =>
-                            reminder.date.isBetween(
-                              hour,
-                              moment(hour).add(30, "minutes")
-                            ) || reminder.date.isSame(hour, "minute")
-                        )
-                        .map(reminder => (
-                          <div
-                            onClick={() => handleAddReminder(weekday, reminder)}
-                            style={{ backgroundColor: reminder.color }}
-                          >
-                            {reminder.title}
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        <WeeklyView
+          date={current_date}
+          onAdd={handleAddReminder}
+          reminders={reminders}
+        />
       )}
       {view === "month" && (
-        <div className={styles.month_view}>
-          {getMonthDays(current_date).map((date, index) => (
-            <div
-              className={classnames({
-                [styles.day]: true,
-                [styles.first_day]: index < 7,
-                [styles.disabled]: !date.isSame(current_date, "month"),
-                [styles.active]: date.isSame(moment(), "day"),
-                [styles.current]: date.isSame(current_date, "day")
-              })}
-            >
-              <span>{index < 7 && getWeek()[index].format("ddd")}</span>
-
-              <div className={styles.reminders}>
-                {reminders[GET_KEY_FORMAT(date)]?.slice(0, 3).map(reminder => (
-                  <div
-                    onClick={() => handleAddReminder(date, reminder)}
-                    style={{ backgroundColor: reminder.color }}
-                  >
-                    {reminder.title}
-                  </div>
-                ))}
-              </div>
-              <span className={styles.date_number}>
-                <span>
-                  <span
-                    onClick={ev => {
-                      handleAddReminder(date);
-                      ev.stopPropagation();
-                    }}
-                  >
-                    +
-                  </span>
-                  <span>
-                    <WeatherIcon />
-                  </span>
-                  {reminders[GET_KEY_FORMAT(date)]?.slice(3).length
-                    ? reminders[GET_KEY_FORMAT(date)]?.slice(3).length
-                    : ""}
-                </span>
-                <span onClick={() => handleDateChange(date)}>
-                  {" "}
-                  {date.format("DD")}
-                </span>
-              </span>
-            </div>
-          ))}
-        </div>
+        <MonthlyView
+          date={current_date}
+          onAdd={handleAddReminder}
+          onChange={handleDateChange}
+          reminders={reminders}
+        />
       )}
       <Fab onClick={toggleCreating} color="primary" className={styles.add}>
         +

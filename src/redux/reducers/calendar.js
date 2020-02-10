@@ -41,12 +41,11 @@ export const calendar = (state = INITIAL_STATE, action) => {
       const reminderToUpdateIndex = state.reminders[
         action.payload.old_key
       ].findIndex(reminder => reminder.id === action.payload.reminder.id);
-      console.log(action.payload.reminder);
+
       if (isDifferentDate) {
         clonedList.splice(reminderToUpdateIndex, 1);
         new_list.push(action.payload.reminder);
       } else {
-        console.log(action.payload.reminder);
         clonedList[reminderToUpdateIndex] = action.payload.reminder;
       }
 

@@ -147,11 +147,12 @@ function Calendar() {
               {period.format("HH:mm")}
               <div className={styles.reminders}>
                 {reminders[GET_KEY_FORMAT(period)]
-                  ?.filter(reminder =>
-                    reminder.date.isBetween(
-                      period,
-                      moment(period).add(30, "minutes")
-                    )
+                  ?.filter(
+                    reminder =>
+                      reminder.date.isBetween(
+                        period,
+                        moment(period).add(30, "minutes")
+                      ) || reminder.date.isSame(period, "minute")
                   )
                   .map(reminder => (
                     <div
@@ -178,11 +179,12 @@ function Calendar() {
                     <div>{hour.format("HH:mm ")}</div>
                     <div className={styles.reminders}>
                       {reminders[GET_KEY_FORMAT(weekday)]
-                        ?.filter(reminder =>
-                          reminder.date.isBetween(
-                            hour,
-                            moment(hour).add(30, "minutes")
-                          )
+                        ?.filter(
+                          reminder =>
+                            reminder.date.isBetween(
+                              hour,
+                              moment(hour).add(30, "minutes")
+                            ) || reminder.date.isSame(hour, "minute")
                         )
                         .map(reminder => (
                           <div

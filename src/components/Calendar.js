@@ -37,15 +37,18 @@ function Calendar() {
         old_key: GET_KEY_FORMAT(old_date)
       });
     } else {
+      //GENERATES REMINDER ID
       reminder.id = reminders[GET_KEY_FORMAT(reminder.date)]
         ? reminders[GET_KEY_FORMAT(reminder.date)].length
         : 0;
+
       createReminder({ reminder, key: GET_KEY_FORMAT(reminder.date) });
     }
     closeCreateOrEditDialog();
   }
 
   function openCreateOrEditDialog(date, data) {
+    //CHECKS IF OPENING TO UPDATE
     if (data) {
       setReminderToEdit(data);
     }

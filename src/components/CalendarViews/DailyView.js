@@ -4,6 +4,7 @@ import styles from "./views.module.scss";
 import { getDayHours } from "../date_utils";
 import { GET_KEY_FORMAT } from "../../utils/constants";
 import moment from "moment";
+import Reminder from "../Reminder/Reminder";
 
 function DailyView({ date, onAdd, reminders }) {
   return (
@@ -21,12 +22,7 @@ function DailyView({ date, onAdd, reminders }) {
                   ) || reminder.date.isSame(period, "minute")
               )
               .map(reminder => (
-                <div
-                  onClick={() => onAdd(period, reminder)}
-                  style={{ backgroundColor: reminder.color }}
-                >
-                  {reminder.title}
-                </div>
+                <Reminder reminder={reminder} onEdit={onAdd} date={period} />
               ))}
           </div>
         </div>

@@ -4,6 +4,7 @@ import styles from "./views.module.scss";
 import { getWeek, getDayHours } from "../date_utils";
 import { GET_KEY_FORMAT } from "../../utils/constants";
 import moment from "moment";
+import Reminder from "../Reminder/Reminder";
 
 function WeeklyView({ date, onAdd, reminders }) {
   return (
@@ -26,12 +27,11 @@ function WeeklyView({ date, onAdd, reminders }) {
                         ) || reminder.date.isSame(hour, "minute")
                     )
                     .map(reminder => (
-                      <div
-                        onClick={() => onAdd(weekday, reminder)}
-                        style={{ backgroundColor: reminder.color }}
-                      >
-                        {reminder.title}
-                      </div>
+                      <Reminder
+                        reminder={reminder}
+                        onEdit={onAdd}
+                        date={weekday}
+                      />
                     ))}
                 </div>
               </div>

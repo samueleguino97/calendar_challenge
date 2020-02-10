@@ -9,6 +9,7 @@ import classnames from "classnames";
 
 import moment from "moment";
 import { GET_KEY_FORMAT } from "../../utils/constants";
+import Reminder from "../Reminder/Reminder";
 
 function MonthlyView({ date, reminders, onAdd, onChange }) {
   return (
@@ -27,12 +28,7 @@ function MonthlyView({ date, reminders, onAdd, onChange }) {
 
           <div className={styles.reminders}>
             {reminders[GET_KEY_FORMAT(month_day)]?.slice(0, 3).map(reminder => (
-              <div
-                onClick={() => onAdd(month_day, reminder)}
-                style={{ backgroundColor: reminder.color }}
-              >
-                {reminder.title}
-              </div>
+              <Reminder reminder={reminder} onEdit={onAdd} date={month_day} />
             ))}
           </div>
           <span className={styles.date_number}>

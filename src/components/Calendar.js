@@ -1,69 +1,29 @@
 import React, { useState } from "react";
-import { getMonthDays, getWeek, getDayHours } from "./date_utils";
 import styles from "./calendar.module.scss";
 import moment from "moment";
 import { GET_KEY_FORMAT, VIEWS } from "../utils/constants";
-import { useAction, useFetch } from "../hooks";
+import { useCalendarActions } from "../hooks";
 import { useSelector } from "react-redux";
-import {
-  ChangeView,
-  ChangeDate,
-  AddReminder,
-  ToggleCreating,
-  UpdateReminder
-} from "../redux/actions";
 import { Fab, Button } from "@material-ui/core";
-import classnames from "classnames";
 import ReminderCreationDialog from "./ReminderCreationDialog/ReminderCreationDialog";
-import { ReactComponent as WeatherIcon } from "../assets/icons/weather.svg";
 import MonthlyView from "./CalendarViews/MonthlyView";
 import WeeklyView from "./CalendarViews/WeeklyView";
 import DailyView from "./CalendarViews/DailyView";
 
 function Calendar() {
-  const handleChangeView = useAction(ChangeView);
-  const handleDateChange = useAction(ChangeDate);
-  const createReminder = useAction(AddReminder);
-  const updateReminder = useAction(UpdateReminder);
-  const toggleCreating = useAction(ToggleCreating);
+  const {
+    createReminder,
+    handleChangeView,
+    handleDateChange,
+    toggleCreating,
+    updateReminder
+  } = useCalendarActions();
   const { view, current_date, reminders, creating_reminder } = useSelector(
     state => state.calendar
   );
-  const { data, loading, error } = useFetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=London&appid=b1759ab2e648648dd842f387480a6c9f`
-  );
   const [reminderToEdit, setReminderToEdit] = useState(null);
-  function handleNext() {
-    switch (view) {
-      case "month":
-        handleDateChange(moment(current_date).add(1, "month"));
-        break;
-      case "week":
-        handleDateChange(moment(current_date).add(1, "week"));
-        break;
-      case "day":
-        handleDateChange(moment(current_date).add(1, "day"));
-        break;
-
-      default:
-        break;
-    }
-  }
-  function handlePrev() {
-    switch (view) {
-      case "month":
-        handleDateChange(moment(current_date).subtract(1, "month"));
-        break;
-      case "week":
-        handleDateChange(moment(current_date).subtract(1, "week"));
-        break;
-      case "day":
-        handleDateChange(moment(current_date).subtract(1, "day"));
-        break;
-
-      default:
-        break;
-    }
+  function handleDateStep(direction = 0) {
+    handleDateChange(moment(current_date).add(direction, view));
   }
   function handleToday() {
     handleDateChange(moment());
@@ -108,7 +68,6 @@ function Calendar() {
     handleDateChange(date);
     toggleCreating();
   }
-  console.log(reminders);
 
   return (
     <div className={styles.container}>
@@ -127,9 +86,9 @@ function Calendar() {
       <header>
         <h1>{current_date.format("MMMM Do, YYYY")}</h1>
         <div className={styles.buttons}>
-          <Button onClick={handlePrev}>Prev</Button>
+          <Button onClick={() => handleDateStep(-1)}>Prev</Button>
           <Button onClick={handleToday}>Today</Button>
-          <Button onClick={handleNext}>Next</Button>
+          <Button onClick={() => handleDateStep(-1)}>Next</Button>
         </div>
         <div className={styles.views}>
           {VIEWS.map(view_option => (

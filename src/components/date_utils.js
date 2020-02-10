@@ -32,3 +32,13 @@ export function getDayHours(day = moment()) {
   );
   return period_array;
 }
+
+export function sortByDate(a, b) {
+  if (moment(a.date).valueOf() > moment(b.date).valueOf()) {
+    return 1;
+  } else if (moment(a.date).valueOf() < moment(b.date).valueOf()) {
+    return -1;
+  } else {
+    return 0;
+  }
+}

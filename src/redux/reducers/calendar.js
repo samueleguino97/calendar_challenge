@@ -6,6 +6,7 @@ import {
   UPDATE_REMINDER
 } from "../actions/types";
 import moment from "moment";
+import { sortByDate } from "../../components/date_utils";
 
 const INITIAL_STATE = {
   reminders: {},
@@ -31,7 +32,7 @@ export const calendar = (state = INITIAL_STATE, action) => {
           [action.payload.key]: [
             ...(state.reminders[action.payload.key] || []),
             action.payload.reminder
-          ]
+          ].sort(sortByDate)
         }
       };
     case UPDATE_REMINDER:
@@ -57,8 +58,8 @@ export const calendar = (state = INITIAL_STATE, action) => {
         ...state,
         reminders: {
           ...state.reminders,
-          [action.payload.old_key]: clonedList,
-          [action.payload.key]: new_list
+          [action.payload.old_key]: clonedList.sort(sortByDate),
+          [action.payload.key]: new_list.sort(sortByDate)
         }
       };
     default:

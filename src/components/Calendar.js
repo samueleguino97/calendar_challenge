@@ -29,39 +29,23 @@ function Calendar() {
     handleDateChange(moment());
   }
 
-  function addReminder({
-    date = moment(),
-    title,
-    city,
-    info,
-    color,
-    id,
-    existing,
-    old_date
-  }) {
-    const reminder = {
-      title,
-      date,
-      city,
-      info,
-      color,
-      id
-    };
+  function addReminder({ existing, old_date, ...reminder }) {
     if (existing) {
       updateReminder({
         reminder,
-        key: GET_KEY_FORMAT(date),
+        key: GET_KEY_FORMAT(reminder.date),
         old_key: GET_KEY_FORMAT(old_date)
       });
     } else {
-      reminder.id = reminders[GET_KEY_FORMAT(date)]
-        ? reminders[GET_KEY_FORMAT(date)].length
+      reminder.id = reminders[GET_KEY_FORMAT(reminder.date)]
+        ? reminders[GET_KEY_FORMAT(reminder.date)].length
         : 0;
-      createReminder({ reminder, key: GET_KEY_FORMAT(date) });
+      createReminder({ reminder, key: GET_KEY_FORMAT(reminder.date) });
     }
-    toggleCreating();
+    closeCreateOrEditDialog();
   }
-  function handleAddReminder(date, data) {
+
+  function openCreateOrEditDialog(date, data) {
     if (data) {
       setReminderToEdit(data);
     }
@@ -69,20 +53,13 @@ function Calendar() {
     toggleCreating();
   }
 
+  function closeCreateOrEditDialog() {
+    toggleCreating();
+    setReminderToEdit(null);
+  }
+
   return (
     <div className={styles.container}>
-      {creating_reminder && (
-        <ReminderCreationDialog
-          open={creating_reminder}
-          onClose={() => {
-            toggleCreating();
-            setReminderToEdit(null);
-          }}
-          onAdd={addReminder}
-          currentDate={current_date}
-          data={reminderToEdit}
-        />
-      )}
       <header>
         <h1>{current_date.format("MMMM Do, YYYY")}</h1>
         <div className={styles.buttons}>
@@ -105,21 +82,21 @@ function Calendar() {
       {view === "day" && (
         <DailyView
           date={current_date}
-          onAdd={handleAddReminder}
+          onAdd={openCreateOrEditDialog}
           reminders={reminders}
         />
       )}
       {view === "week" && (
         <WeeklyView
           date={current_date}
-          onAdd={handleAddReminder}
+          onAdd={openCreateOrEditDialog}
           reminders={reminders}
         />
       )}
       {view === "month" && (
         <MonthlyView
           date={current_date}
-          onAdd={handleAddReminder}
+          onAdd={openCreateOrEditDialog}
           onChange={handleDateChange}
           reminders={reminders}
         />
@@ -127,6 +104,15 @@ function Calendar() {
       <Fab onClick={toggleCreating} color="primary" className={styles.add}>
         +
       </Fab>
+      {creating_reminder && (
+        <ReminderCreationDialog
+          open={creating_reminder}
+          onClose={closeCreateOrEditDialog}
+          onAdd={addReminder}
+          currentDate={current_date}
+          data={reminderToEdit}
+        />
+      )}
     </div>
   );
 }

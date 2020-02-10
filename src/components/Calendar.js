@@ -12,7 +12,7 @@ import {
   ToggleCreating,
   UpdateReminder
 } from "../redux/actions";
-import { Fab } from "@material-ui/core";
+import { Fab, Button } from "@material-ui/core";
 import classnames from "classnames";
 import ReminderCreationDialog from "./ReminderCreationDialog/ReminderCreationDialog";
 import { ReactComponent as WeatherIcon } from "../assets/icons/weather.svg";
@@ -73,7 +73,8 @@ function Calendar() {
     info,
     color,
     id,
-    existing
+    existing,
+    old_date
   }) {
     const reminder = {
       title,
@@ -84,7 +85,11 @@ function Calendar() {
       id
     };
     if (existing) {
-      updateReminder({ reminder, key: GET_KEY_FORMAT(date) });
+      updateReminder({
+        reminder,
+        key: GET_KEY_FORMAT(date),
+        old_key: GET_KEY_FORMAT(old_date)
+      });
     } else {
       reminder.id = reminders[GET_KEY_FORMAT(date)]
         ? reminders[GET_KEY_FORMAT(date)].length
@@ -100,6 +105,7 @@ function Calendar() {
     handleDateChange(date);
     toggleCreating();
   }
+  console.log(reminders);
 
   return (
     <div className={styles.container}>
@@ -118,9 +124,9 @@ function Calendar() {
       <header>
         <h1>{current_date.format("MMMM Do, YYYY")}</h1>
         <div className={styles.buttons}>
-          <button onClick={handlePrev}>Prev</button>
-          <button onClick={handleToday}>Today</button>
-          <button onClick={handleNext}>Next</button>
+          <Button onClick={handlePrev}>Prev</Button>
+          <Button onClick={handleToday}>Today</Button>
+          <Button onClick={handleNext}>Next</Button>
         </div>
         <div className={styles.views}>
           {VIEWS.map(view_option => (
@@ -137,7 +143,7 @@ function Calendar() {
       {view === "day" && (
         <div className={styles.day_view}>
           {getDayHours(current_date).map(period => (
-            <div>
+            <div className={styles.hours}>
               {period.format("HH:mm")}
               <div className={styles.reminders}>
                 {reminders[GET_KEY_FORMAT(period)]
@@ -168,7 +174,7 @@ function Calendar() {
 
               {getDayHours(weekday).map((hour, index) => {
                 return (
-                  <div>
+                  <div className={styles.hours}>
                     <div>{hour.format("HH:mm ")}</div>
                     <div className={styles.reminders}>
                       {reminders[GET_KEY_FORMAT(weekday)]

@@ -15,8 +15,8 @@ export const ChangeDate = new_date => dispatch => {
 export const AddReminder = ({ reminder, key }) => dispatch => {
   dispatch({ type: ADD_REMINDER, payload: { key, reminder } });
 };
-export const UpdateReminder = ({ reminder, key }) => dispatch => {
-  dispatch({ type: UPDATE_REMINDER, payload: { key, reminder } });
+export const UpdateReminder = ({ reminder, key, old_key }) => dispatch => {
+  dispatch({ type: UPDATE_REMINDER, payload: { key, reminder, old_key } });
 };
 export const ToggleCreating = () => dispatch => {
   dispatch({ type: TOGGLE_CREATING_REMINDER });

@@ -35,17 +35,31 @@ export const calendar = (state = INITIAL_STATE, action) => {
         }
       };
     case UPDATE_REMINDER:
-      const clonedList = Array.from(state.reminders[action.payload.key]);
-      console.log(clonedList);
+      const isDifferentDate = action.payload.old_key !== action.payload.key;
+      const clonedList = Array.from(state.reminders[action.payload.old_key]);
+      let new_list = Array.from(state.reminders[action.payload.key] || []);
       const reminderToUpdateIndex = state.reminders[
-        action.payload.key
+        action.payload.old_key
       ].findIndex(reminder => reminder.id === action.payload.reminder.id);
-      clonedList[reminderToUpdateIndex] = action.payload.reminder;
+      console.log(action.payload.reminder);
+      if (isDifferentDate) {
+        clonedList.splice(reminderToUpdateIndex, 1);
+        new_list.push(action.payload.reminder);
+      } else {
+        console.log(action.payload.reminder);
+        clonedList[reminderToUpdateIndex] = action.payload.reminder;
+      }
+
+      if (!isDifferentDate) {
+        new_list = clonedList;
+      }
+
       return {
         ...state,
         reminders: {
           ...state.reminders,
-          [action.payload.key]: clonedList
+          [action.payload.old_key]: clonedList,
+          [action.payload.key]: new_list
         }
       };
     default:

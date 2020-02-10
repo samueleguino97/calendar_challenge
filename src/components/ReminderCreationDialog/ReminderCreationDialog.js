@@ -15,7 +15,7 @@ import Autocomplete from "../Autocomplete/Autocomplete";
 import { SELECT_CITY_LIST } from "../../utils/constants";
 
 import styles from "./reminder_creation.module.scss";
-import { useFormState, useLazyFetch, useFetch } from "../../hooks";
+import { useFormState, useFetch } from "../../hooks";
 import moment from "moment";
 import { CirclePicker } from "react-color";
 
@@ -139,7 +139,8 @@ function ReminderCreationDialog({ open, onClose, onAdd, currentDate, data }) {
                 date,
                 color,
                 existing: !!data,
-                id: data?.id
+                id: data?.id,
+                old_date: data?.date
               });
               clear();
             }
